@@ -1,0 +1,17 @@
+function mathSetup() {
+    declare global PI = 3.1415;
+    declare global TAU = 6.2831;
+    declare global TAUPROP = 1.6180;
+}
+
+function radians(degrees: num): num {
+    line result = degrees * PI / 180;
+
+    return result;
+}
+
+function degrees(radians: num): num {
+    line result = radians * 180 / PI;
+
+    return result;
+}

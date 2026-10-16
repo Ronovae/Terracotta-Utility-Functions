@@ -1,0 +1,43 @@
+// Converts plot coordinates into world chunk coordinates (from F3 menu)
+function locToChunk(location: loc): loc {
+    //print(location.getCoordinate(coord = "X", type = "World coordinate"));
+    //print(location.getCoordinate(coord = "Z", type = "World coordinate"));
+    line chunk = loc.setAllCoordinates(
+        loc(0, 0, 0),
+        num.round(location.getCoordinate(coord = "X", type = "World coordinate") / 16, mode = "Floor"),
+        0,
+        num.round(location.getCoordinate(coord = "Z", type = "World coordinate") / 16, mode = "Floor"),
+        'type' = "Plot coordinate"
+    );
+    return chunk;
+}
+
+// Converts world cunk coordinates into plot coordinates
+function chunkToLoc(chunk: loc): loc {
+    line location = loc.setAllCoordinates(
+        loc(0, 0, 0),
+        chunk.x * 16 + 0.5,
+        0,
+        chunk.z * 16 + 0.5,
+        'type' = "World coordinate"
+    );
+    // if you look down and face south, it returns the bottom right corner
+    // a.k.a the smallest chunk coordinate
+    // the Y coordinate is alyways 0
+    return location;
+}
+
+// Get all adjacent locations in a 3x3 grid (origin excluded)
+function getAdjacentLocs(location: loc): list[loc] {
+    line loc_1 = location.shiftAllAxes(1, 0, 0);
+    line loc_2 = location.shiftAllAxes(-1, 0, 0);
+    line loc_3 = location.shiftAllAxes(0, 0, 1);
+    line loc_4 = location.shiftAllAxes(0, 0, -1);
+    line loc_5 = location.shiftAllAxes(1, 0, 1);
+    line loc_6 = location.shiftAllAxes(-1, 0, -1);
+    line loc_7 = location.shiftAllAxes(1, 0, -1);
+    line loc_8 = location.shiftAllAxes(-1, 0, 1);
+    
+    line adj_locs = [loc_1, loc_2, loc_3, loc_4, loc_5, loc_6, loc_7, loc_8];
+    return adj_locs as list[loc];
+}
