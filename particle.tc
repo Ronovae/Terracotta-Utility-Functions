@@ -1,0 +1,87 @@
+// Diamondfires animated particle spiral
+process displayAnimatedParticleSpiral(
+    particle: par,
+    base: loc,
+    length: num = 10,
+    diameter: num = 2,
+    rotation: num = 4,
+    duration: num = 40, // Animation duration in ticks
+    count: num = 50, // Particle count
+) {
+    line shift = base.shiftInDirection(diameter / 2, direction = "Upward");
+    line direction = vec.between(base, shift);
+    line shift = base.shiftInDirection(diameter / 2);
+    line axis = vec.between(base, shift);
+    line remainder: num;
+
+    repeat (duration) {
+        repeat (count / duration + remainder) {
+            base = base.shiftInDirection(length / count);
+            shift = base.shiftOnVector(direction);
+            allPlayers.displayParticleEffect(particle, shift);
+
+            direction = direction.rotateAroundVec(axis, 360 * rotation / count);
+        }
+
+        line rounded = num.round(count / duration + remainder, mode = "Floor");
+        remainder = count / duration + remainder - rounded;
+
+        wait();
+    }
+}
+
+// Diamondfires animated particle cirlce
+process displayAnimatedParticleCircle (
+    particle: par,
+    base: loc,
+    diameter: num = 2,
+    duration: num = 40, // Animation duration in ticks
+    count: num = 50, // Particle count
+
+) {
+    line shift = base.shiftInDirection(diameter / 2, direction = "Upward");
+    line direction = vec.between(base, shift);
+    line shift = base.shiftInDirection(diameter / 2);
+    line axis = vec.between(base, shift);
+    line remainder: num;
+
+    repeat (duration) {
+        repeat (count / duration + remainder) {
+            shift = base.shiftOnVector(direction);
+            allPlayers.displayParticleEffect(particle, shift);
+
+            direction = direction.rotateAroundVec(axis, 360 / count);
+        }
+
+        line rounded = num.round(count / duration + remainder, mode = "Floor");
+        remainder = count / duration + remainder - rounded;
+
+        wait();
+    }
+}
+
+// Diamondfires animated particle line
+process displayAnimatedParticleLine (
+    particle: par,
+    start_: loc,
+    end: loc,
+    spacing: num = 2,
+    duration: num = 40, // Animation duration in ticks
+) {
+    line base = start_.faceLocation(end);
+    line length = start_.getDistance(end);
+    line remainder: num;
+
+    repeat (duration) {
+        repeat (length / spacing / duration + remainder) {
+            line rounded = length / spacing;
+            base = base.shiftInDirection(length / rounded);
+            allPlayers.displayParticleEffect(particle, base);
+        }
+
+        line rounded = num.round(length / spacing / duration + remainder, mode = "Floor");
+        remainder = length / spacing / duration + remainder - rounded;
+
+        wait();
+    }
+}
