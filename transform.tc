@@ -41,3 +41,37 @@ function getAdjacentLocs(location: loc): list[loc] {
     line adj_locs = [loc_1, loc_2, loc_3, loc_4, loc_5, loc_6, loc_7, loc_8];
     return adj_locs as list[loc];
 }
+
+// Casts a ray which checks for a plane
+// Plane location: Any point on the plane, Facing: normal of the plane
+function raycastToPlane(origin: loc, distance: num, plane: loc): any {
+    line final_hit: any = 0;
+    line ray_origin = vec(origin.x, origin.y, origin.z);
+    line ray_direction = origin.getDirection();
+    line plane_point = vec(plane.x, plane.y, plane.z);
+    line plane_normal = plane.getDirection();
+
+    line offset = plane_point.subtract(ray_origin);
+
+    line numerator = offset.dot(plane_normal);
+    line denominator = ray_direction.dot(plane_normal);
+
+    if (denominator == 0) {
+        return final_hit;
+    }
+
+    line t = numerator / denominator;
+
+    if (t >= 0 && t <= distance) {
+        line travel_vector = ray_direction * t;
+        
+        final_hit = loc(
+            origin.x + travel_vector.x,
+            origin.y + travel_vector.y,
+            origin.z + travel_vector.z
+        );
+    }
+
+    // Returns 0 if the ray does not intersect the plane
+    return final_hit;
+}
