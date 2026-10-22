@@ -15,3 +15,9 @@ function degrees(radians: num): num {
 
     return result;
 }
+
+function getSignedAngleBetweenVectors(vector_1: vec, vector_2: vec): num {
+    line angle = num.atan2((vector_1.x * vector_2.z) - (vector_1.z * vector_2.x), vector_1.dot(vector_2));
+    
+    return angle;
+}
